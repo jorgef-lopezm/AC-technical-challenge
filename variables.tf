@@ -1,17 +1,17 @@
 variable "region" {
-  type = string
+  type        = string
   description = "AWS region where the infrastructure will be created"
-  default = "us-east-1"
+  default     = "us-east-1"
 }
 
 variable "project_name" {
-  type = string
+  type        = string
   description = "Name for the project, this will be used as a prefix for naming the resources"
-  default = "demo"
+  default     = "demo"
 }
 
 variable "devops" {
-  type = string
+  type        = string
   description = "Name for the devops managing the resources"
-  default = "Jorge Lopez"
+  default     = "Jorge Lopez"
 }
