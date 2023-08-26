@@ -22,3 +22,11 @@ module "ecs" {
   source       = "./ecs"
   project_name = var.project_name
 }
+
+module "ec2" {
+  source          = "./ec2"
+  project_name    = var.project_name
+  user_data_path  = "${path.root}/templates/ec2/user_data.tpl"
+  public_subnet   = module.vpc.public_subnets[0]
+  security_groups = module.vpc.bastion_security_group
+}
