@@ -18,7 +18,7 @@ plan:
 
 # Apply Terraform changes
 apply:
-	terraform apply
+	terraform apply -auto-approve
 
 # Destroy Terraform infrastructure
 destroy:
@@ -28,7 +28,7 @@ flow:
 	terraform validate
 	terraform fmt -recursive
 	terraform plan
-	terraform apply
+	terraform apply -auto-approve
 
 # Clean up temporary files and directories
 clean:
