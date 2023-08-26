@@ -17,3 +17,7 @@ variable "private_subnets" {
   type        = list(string)
   description = "List of the CIDR blocks for private subnets (for resources not needing direct internet access)"
 }
+
+variable "security_groups" {
+
+}

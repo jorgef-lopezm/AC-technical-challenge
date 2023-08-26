@@ -114,3 +114,36 @@ resource "aws_route_table_association" "private_subnets_association" {
   subnet_id      = aws_subnet.private_subnets[count.index].id
   route_table_id = aws_route_table.private_route_table[count.index].id
 }
+
+resource "aws_db_subnet_group" "db_subnet_group" {
+  name       = "${local.prefix}-db-subnet-group"
+  subnet_ids = aws_subnet.private_subnets[*].id
+
+  tags = local.common_tags
+}
+
+resource "aws_security_group" "vpc_sg" {
+  for_each    = var.security_groups
+  name        = each.value.name
+  description = each.value.description
+  vpc_id      = aws_vpc.main.id
+
+  dynamic "ingress" {
+    for_each = each.value.ingress
+    content {
+      from_port   = ingress.value.from
+      to_port     = ingress.value.to
+      protocol    = ingress.value.protocol
+      cidr_blocks = ingress.value.cidr_blocks
+    }
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = local.common_tags
+}

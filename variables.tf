@@ -15,3 +15,16 @@ variable "devops" {
   description = "Name for the devops managing the resources"
   default     = "Jorge Lopez"
 }
+
+variable "db_name" {
+  type        = string
+  description = "Name of the database"
+}
+
+variable "db_user" {
+
+}
+
+variable "db_pass" {
+
+}
