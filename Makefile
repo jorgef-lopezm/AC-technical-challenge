@@ -22,9 +22,10 @@ apply:
 
 # Destroy Terraform infrastructure
 destroy:
-	terraform destroy
+	terraform destroy -auto-approve
 
 flow:
+	terraform init
 	terraform validate
 	terraform fmt -recursive
 	terraform plan

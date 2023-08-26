@@ -122,27 +122,45 @@ resource "aws_db_subnet_group" "db_subnet_group" {
   tags = local.common_tags
 }
 
-resource "aws_security_group" "vpc_sg" {
-  for_each    = var.security_groups
-  name        = each.value.name
-  description = each.value.description
+resource "aws_security_group" "rds_sg" {
+  name        = "${local.prefix}-rds-sg"
+  description = "Security group for RDS instance"
   vpc_id      = aws_vpc.main.id
 
-  dynamic "ingress" {
-    for_each = each.value.ingress
-    content {
-      from_port   = ingress.value.from
-      to_port     = ingress.value.to
-      protocol    = ingress.value.protocol
-      cidr_blocks = ingress.value.cidr_blocks
-    }
+  ingress {
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ecs_sg.id]
+  }
+
+  tags = local.common_tags
+}
+
+resource "aws_security_group" "ecs_sg" {
+  name        = "${local.prefix}-ecs-sg"
+  description = "Security group for ECS service"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = var.private_subnets
   }
 
   tags = local.common_tags

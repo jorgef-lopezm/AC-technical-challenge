@@ -4,7 +4,6 @@ module "vpc" {
   cidr_block      = local.vpc_cidr_block
   public_subnets  = ["10.16.0.0/20", "10.16.16.0/20", "10.16.32.0/20"]
   private_subnets = ["10.16.48.0/20", "10.16.64.0/20", "10.16.80.0/20"]
-  security_groups = local.security_groups
 }
 
 module "rds" {
