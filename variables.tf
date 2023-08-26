@@ -7,7 +7,7 @@ variable "region" {
 variable "project_name" {
   type        = string
   description = "Name for the project, this will be used as a prefix for naming the resources"
-  default     = "demo"
+  default     = "ecs-demo"
 }
 
 variable "devops" {

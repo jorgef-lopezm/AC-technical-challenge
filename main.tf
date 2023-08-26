@@ -17,3 +17,8 @@ module "rds" {
   db_instance_class      = "db.t3.micro"
   vpc_security_group_ids = module.vpc.db_security_group
 }
+
+module "ecs" {
+  source       = "./ecs"
+  project_name = var.project_name
+}

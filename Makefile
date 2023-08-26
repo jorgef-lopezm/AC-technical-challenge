@@ -31,6 +31,12 @@ flow:
 	terraform plan
 	terraform apply -auto-approve
 
+workspace-create:
+	terraform workspace new $(name)
+
+workspace-set:
+	terraform workspace select $(name)
+
 # Clean up temporary files and directories
 clean:
 	rm -rf .terraform terraform.tfstate* .terraform.lock.hcl
