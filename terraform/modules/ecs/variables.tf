@@ -32,22 +32,6 @@ variable "db_pass" {
 
 }
 
-variable "log_group_name" {
-
-}
-
-variable "task_execution_role_arn" {
-
-}
-
-variable "task_role_arn" {
-
-}
-
-variable "ecs_cluster" {
-
-}
-
 variable "subnets" {
 
 }
@@ -57,5 +41,9 @@ variable "ecs_security_groups" {
 }
 
 variable "target_group" {
+
+}
+
+variable "lb_dns_name" {
 
 }

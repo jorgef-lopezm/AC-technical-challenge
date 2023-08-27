@@ -1,10 +1,4 @@
-locals {
-  prefix = "${var.project_name}-${terraform.workspace}"
-  common_tags = {
-    Module = "vpc"
-  }
-}
-
+# Create the main VPC
 resource "aws_vpc" "main" {
   cidr_block           = var.cidr_block
   instance_tenancy     = "default"
@@ -17,6 +11,7 @@ resource "aws_vpc" "main" {
   )
 }
 
+# Create public subnets
 resource "aws_subnet" "public_subnets" {
   count                   = length(var.public_subnets)
   vpc_id                  = aws_vpc.main.id
@@ -30,6 +25,7 @@ resource "aws_subnet" "public_subnets" {
   )
 }
 
+# Create private subnets
 resource "aws_subnet" "private_subnets" {
   count                   = length(var.private_subnets)
   vpc_id                  = aws_vpc.main.id
@@ -43,6 +39,7 @@ resource "aws_subnet" "private_subnets" {
   )
 }
 
+# Create an internet gateway
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 
@@ -52,6 +49,7 @@ resource "aws_internet_gateway" "igw" {
   )
 }
 
+# Create a public route table
 resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.main.id
 
@@ -66,12 +64,14 @@ resource "aws_route_table" "public_route_table" {
   )
 }
 
+# Associate public subnets with public route table
 resource "aws_route_table_association" "public_subnets_association" {
   count          = length(var.public_subnets)
   subnet_id      = aws_subnet.public_subnets[count.index].id
   route_table_id = aws_route_table.public_route_table.id
 }
 
+# Create Elastic IP(s) for NAT Gateway(s)
 resource "aws_eip" "ngw_eip" {
   count  = length(var.private_subnets)
   domain = "vpc"
@@ -82,6 +82,8 @@ resource "aws_eip" "ngw_eip" {
   )
 }
 
+# Create NAT Gateway(s) in public subnets, each AZ will have a
+# NAT Gateway to maximize availability
 resource "aws_nat_gateway" "public_ngw" {
   count             = length(var.private_subnets)
   allocation_id     = aws_eip.ngw_eip[count.index].id
@@ -94,6 +96,7 @@ resource "aws_nat_gateway" "public_ngw" {
   )
 }
 
+# Create a private route table
 resource "aws_route_table" "private_route_table" {
   count  = length(var.private_subnets)
   vpc_id = aws_vpc.main.id
@@ -109,12 +112,14 @@ resource "aws_route_table" "private_route_table" {
   )
 }
 
+# Associate private subnets with private route table
 resource "aws_route_table_association" "private_subnets_association" {
   count          = length(var.private_subnets)
   subnet_id      = aws_subnet.private_subnets[count.index].id
   route_table_id = aws_route_table.private_route_table[count.index].id
 }
 
+# Create a RDS subnet group for the database
 resource "aws_db_subnet_group" "db_subnet_group" {
   name       = "${local.prefix}-db-subnet-group"
   subnet_ids = aws_subnet.private_subnets[*].id
@@ -122,6 +127,7 @@ resource "aws_db_subnet_group" "db_subnet_group" {
   tags = local.common_tags
 }
 
+# Create a security group for the RDS instance
 resource "aws_security_group" "rds_sg" {
   name        = "${local.prefix}-rds-sg"
   description = "Security group for RDS instance"
@@ -140,6 +146,7 @@ resource "aws_security_group" "rds_sg" {
   tags = local.common_tags
 }
 
+# Create a security group for the ECS service
 resource "aws_security_group" "ecs_sg" {
   name        = "${local.prefix}-ecs-sg"
   description = "Security group for ECS service"
@@ -169,11 +176,14 @@ resource "aws_security_group" "ecs_sg" {
   tags = local.common_tags
 }
 
+# Create a security group for the EC2 instance
 resource "aws_security_group" "bastion_sg" {
   description = "Segurity group for bastion instance"
   name        = "${local.prefix}-bastion"
   vpc_id      = aws_vpc.main.id
 
+  # For ssh connectivity
+  # Should be limited to admins IPs
   ingress {
     protocol    = "tcp"
     from_port   = 22
@@ -181,13 +191,7 @@ resource "aws_security_group" "bastion_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  egress {
-    protocol    = "tcp"
-    from_port   = 443
-    to_port     = 443
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
+  # For testing the Apache image
   egress {
     protocol    = "tcp"
     from_port   = 80
@@ -195,6 +199,7 @@ resource "aws_security_group" "bastion_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # For connecting to the database
   egress {
     from_port   = 5432
     to_port     = 5432
@@ -205,6 +210,7 @@ resource "aws_security_group" "bastion_sg" {
   tags = local.common_tags
 }
 
+# Create security group for the load balacner
 resource "aws_security_group" "lb_sg" {
   description = "Security group for the ALB"
   name        = "${local.prefix}-lb"

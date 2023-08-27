@@ -1,10 +1,3 @@
-locals {
-  prefix = "${var.project_name}-${terraform.workspace}"
-  common_tags = {
-    Module = "rds"
-  }
-}
-
 resource "aws_db_instance" "default" {
   allocated_storage      = var.db_storage
   db_name                = var.db_name
