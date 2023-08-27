@@ -55,3 +55,7 @@ variable "subnets" {
 variable "ecs_security_groups" {
 
 }
+
+variable "target_group" {
+
+}

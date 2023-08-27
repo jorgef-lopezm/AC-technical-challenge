@@ -44,6 +44,15 @@ module "task" {
   task_execution_role_arn    = module.ecs.task_execution_role
   task_role_arn              = module.ecs.task_role
   ecs_cluster                = module.ecs.ecs_cluster
-  subnets                    = module.vpc.public_subnets
+  subnets                    = module.vpc.private_subnets
   ecs_security_groups        = module.vpc.ecs_security_group
+  target_group               = module.alb.target_group_arn
+}
+
+module "alb" {
+  source              = "./elb"
+  project_name        = var.project_name
+  vpc_id              = module.vpc.vpc_id
+  alb_security_groups = module.vpc.lb_security_group
+  subnets             = module.vpc.public_subnets
 }

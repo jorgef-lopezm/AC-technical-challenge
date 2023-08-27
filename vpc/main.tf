@@ -204,3 +204,25 @@ resource "aws_security_group" "bastion_sg" {
 
   tags = local.common_tags
 }
+
+resource "aws_security_group" "lb_sg" {
+  description = "Security group for the ALB"
+  name        = "${local.prefix}-lb"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = local.common_tags
+}

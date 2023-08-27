@@ -26,13 +26,6 @@
                 "containerPort": 80,
                 "hostPort": 80
             }
-        ],
-        "mountPoints": [
-            {
-                "readOnly": false,
-                "containerPath": "/var/www/html/",
-                "sourceVolume": "static"
-            }
         ]
     }
 ]

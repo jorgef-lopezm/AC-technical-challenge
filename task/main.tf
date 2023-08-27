@@ -16,7 +16,7 @@ resource "aws_ecs_task_definition" "main" {
     db_name          = var.db_name
     db_user          = var.db_user
     db_pass          = var.db_pass
-    allowed_hosts    = "*"
+    allowed_hosts    = "var.lb_dns_name" # aws_lb.api.dns_name
     log_group_name   = var.log_group_name
     log_group_region = data.aws_region.current.name
   })
@@ -41,8 +41,14 @@ resource "aws_ecs_service" "app" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = var.subnets
-    security_groups  = var.ecs_security_groups
-    assign_public_ip = true
+    subnets         = var.subnets
+    security_groups = var.ecs_security_groups
+    # assign_public_ip = true
+  }
+
+  load_balancer {
+    target_group_arn = var.target_group
+    container_name   = "app"
+    container_port   = 80
   }
 }
