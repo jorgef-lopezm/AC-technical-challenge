@@ -25,7 +25,8 @@ Before you begin, make sure you have the following:
    git clone https://github.com/yourusername/ecs-terraform-project.git
    cd technical-challenge/terraform/
    ```
-2. Update the terraform.tfvars file with your desired configuration settings.
+2. Create a ```terraform.tfvars``` file
+3. Update the terraform.tfvars file with your desired configuration settings. For reference use the ```terraform.tfvars.example``` file.
 
 ## Project Structure
 ```bash
