@@ -30,3 +30,20 @@ module "ec2" {
   public_subnet   = module.vpc.public_subnets[0]
   security_groups = module.vpc.bastion_security_group
 }
+
+module "task" {
+  source                     = "./task"
+  project_name               = var.project_name
+  container_definitions_path = "${path.root}/templates/task/container-definitions.json.tpl"
+  db_host                    = module.rds.db_endpoint
+  db_port                    = 5432
+  db_name                    = var.db_name
+  db_user                    = var.db_user
+  db_pass                    = var.db_pass
+  log_group_name             = module.ecs.log_group
+  task_execution_role_arn    = module.ecs.task_execution_role
+  task_role_arn              = module.ecs.task_role
+  ecs_cluster                = module.ecs.ecs_cluster
+  subnets                    = module.vpc.public_subnets
+  ecs_security_groups        = module.vpc.ecs_security_group
+}
