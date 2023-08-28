@@ -9,6 +9,7 @@ This project is for the technical challenge for Arroyo Consulting, it consists i
 - [Terraform Configuration](#terraform-configuration)
 - [Deploying the Application](#deploying-the-application)
 - [Why ECS?](#why-ecs?)
+- [Infrastructure Diagram](#infrastructure-diagram)
 
 ## Prerequisites
 
@@ -90,3 +91,5 @@ make flow
 ```
 ## Why ECS?
 ECS is a great option for deploying containerized applications. ECS takes care of the complexities of orchestrating containers, such as scheduling, scaling, and managing container instances. It is also simple to configure compared to other container orchestration tools.
+## Infrastructure Diagram
+![Infrastructure Diagram](https://raw.githubusercontent.com/jorgef-lopezm/AC-technical-challenge/main/Amazon%20ECS%20Architecture%20Diagram.png?token=GHSAT0AAAAAACGYFFZJJU6KGCQVQZMHZ5CAZHL5FYQ)
