@@ -5,7 +5,6 @@ variable "project_name" {
 
 variable "ecr_image" {
   description = "ECR image for proxy"
-  default     = "public.ecr.aws/w3w5l3i9/jorge-apache:latest"
 }
 
 variable "container_definitions_path" {

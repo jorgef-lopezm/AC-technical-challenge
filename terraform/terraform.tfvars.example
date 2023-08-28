@@ -1,0 +1,6 @@
+db_name = 
+db_user = 
+db_pass = 
+devops  =
+project_name = 
+ecr_image = "public.ecr.aws/w3w5l3i9/jorge-apache:latest"

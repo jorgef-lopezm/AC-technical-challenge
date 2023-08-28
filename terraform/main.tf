@@ -69,6 +69,7 @@ module "ecs" {
   ecs_security_groups        = module.vpc.ecs_security_group
   target_group               = module.alb.target_group_arn
   lb_dns_name                = module.alb.lb_dns_name
+  ecr_image                  = var.ecr_image
 }
 
 module "alb" {

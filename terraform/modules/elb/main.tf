@@ -1,10 +1,3 @@
-locals {
-  prefix = "${var.project_name}-${terraform.workspace}"
-  common_tags = {
-    Module = "alb"
-  }
-}
-
 resource "aws_lb" "main" {
   name               = "${local.prefix}-lb"
   internal           = false

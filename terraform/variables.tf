@@ -7,13 +7,11 @@ variable "region" {
 variable "project_name" {
   type        = string
   description = "Name for the project, this will be used as a prefix for naming the resources"
-  default     = "ecs-demo"
 }
 
 variable "devops" {
   type        = string
   description = "Name for the devops managing the resources"
-  default     = "Jorge Lopez"
 }
 
 variable "db_name" {
@@ -26,5 +24,9 @@ variable "db_user" {
 }
 
 variable "db_pass" {
+
+}
+
+variable "ecr_image" {
 
 }

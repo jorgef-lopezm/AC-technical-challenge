@@ -1,4 +1,4 @@
-resource "aws_db_instance" "default" {
+resource "aws_db_instance" "main" {
   allocated_storage      = var.db_storage
   db_name                = var.db_name
   db_subnet_group_name   = var.db_subnet_group

@@ -1,10 +1,3 @@
-locals {
-  prefix = "${var.project_name}-${terraform.workspace}"
-  common_tags = {
-    Module = "ecs"
-  }
-}
-
 # Creating ECS cluster
 resource "aws_ecs_cluster" "main" {
   name = "${local.prefix}-cluster"
